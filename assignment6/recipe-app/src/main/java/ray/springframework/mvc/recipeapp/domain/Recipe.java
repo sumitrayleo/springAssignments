@@ -32,10 +32,10 @@ public class Recipe {
     @JoinTable(name = "recipe_cateogry",
         joinColumns = @JoinColumn(name = "recipe_id"),
         inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<Category> categories;
+    private Set<Category> categories = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
-    private Set<Ingredient> ingredients;
+    private Set<Ingredient> ingredients = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -115,13 +115,17 @@ public class Recipe {
 
     public void setNotes(Notes notes) {
         this.notes = notes;
+        this.notes.setRecipe(this);
     }
 
     public Set<Ingredient> getIngredients() {
-        if(ingredients == null){
-            ingredients = new HashSet<>();
-        }
         return ingredients;
+    }
+
+    public Recipe addIngredient(Ingredient ingredient){
+        ingredient.setRecipe(this);
+        this.ingredients.add(ingredient);
+        return this;
     }
 
     public void setIngredients(Set<Ingredient> ingredients) {
@@ -137,9 +141,6 @@ public class Recipe {
     }
 
     public Set<Category> getCategories() {
-        if(this.categories == null){
-            this.categories = new HashSet<>();
-        }
         return categories;
     }
 
