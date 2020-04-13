@@ -1,6 +1,7 @@
 package ray.springframework.mvc.recipeapp.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -117,6 +118,9 @@ public class Recipe {
     }
 
     public Set<Ingredient> getIngredients() {
+        if(ingredients == null){
+            ingredients = new HashSet<>();
+        }
         return ingredients;
     }
 
@@ -133,6 +137,9 @@ public class Recipe {
     }
 
     public Set<Category> getCategories() {
+        if(this.categories == null){
+            this.categories = new HashSet<>();
+        }
         return categories;
     }
 
