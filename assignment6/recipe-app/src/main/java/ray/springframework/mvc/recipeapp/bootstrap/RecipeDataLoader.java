@@ -1,7 +1,9 @@
 package ray.springframework.mvc.recipeapp.bootstrap;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import ray.springframework.mvc.recipeapp.domain.Difficulty;
 import ray.springframework.mvc.recipeapp.domain.Ingredient;
 import ray.springframework.mvc.recipeapp.domain.Recipe;
@@ -11,6 +13,7 @@ import ray.springframework.mvc.recipeapp.repository.UnitOfMeasureRepository;
 
 import java.math.BigDecimal;
 
+@Slf4j
 @Component
 public class RecipeDataLoader implements CommandLineRunner {
 
@@ -24,6 +27,7 @@ public class RecipeDataLoader implements CommandLineRunner {
         this.recipeRepository = recipeRepository;
     }
 
+    @Transactional
     @Override
     public void run(String... args) throws Exception {
         setupPerfectGuacamole();
@@ -53,6 +57,7 @@ public class RecipeDataLoader implements CommandLineRunner {
         spicyChicken.setServing(4);
 
         recipeRepository.save(spicyChicken);
+        log.debug("Spicy Chicken Recipe is created!!");
     }
 
     private void setupPerfectGuacamole() {
@@ -77,6 +82,7 @@ public class RecipeDataLoader implements CommandLineRunner {
         guacamole.setServing(1);
 
         recipeRepository.save(guacamole);
+        log.debug("Perfect Guacamole Recipe is created!!");
     }
 
     private Ingredient getIngredient(String description, BigDecimal amount, String uom) {
