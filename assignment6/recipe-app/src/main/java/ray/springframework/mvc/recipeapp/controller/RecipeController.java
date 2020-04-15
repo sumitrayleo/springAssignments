@@ -20,7 +20,7 @@ public class RecipeController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String getAllRecipes(Model model){
-        log.info("Inside " + IndexController.class.getSimpleName() + ".getAllRecipes()");
+        log.info("Inside " + RecipeController.class.getSimpleName() + ".getAllRecipes()");
         model.addAttribute("recipes", recipeService.findAll());
         return "recipe/list";
     }
