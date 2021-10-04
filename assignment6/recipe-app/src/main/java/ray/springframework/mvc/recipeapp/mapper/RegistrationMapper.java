@@ -5,9 +5,9 @@ import org.springframework.util.CollectionUtils;
 import ray.springframework.mvc.recipeapp.domain.AppUser;
 import ray.springframework.mvc.recipeapp.domain.AppUserDevice;
 import ray.springframework.mvc.recipeapp.domain.Device;
+import ray.springframework.mvc.recipeapp.model.DeviceRQ;
 import ray.springframework.mvc.recipeapp.model.Registration;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @UtilityClass
@@ -28,13 +28,33 @@ public class RegistrationMapper {
 
         if (!CollectionUtils.isEmpty(appUserDevices)) {
             for (AppUserDevice appUserDevice : appUserDevices) {
-                registration.getDevices().add(appUserDevice.getDevice());
+                registration.getDevices().add(toDeviceRq(appUserDevice.getDevice(), appUserDevice));
             }
         }
         return registration;
     }
 
-    public Set<AppUserDevice> toAppUserDeviceSet(Registration registration, AppUser appUser) {
+    public Device toDevice(DeviceRQ deviceRq) {
+        Device device = new Device();
+        device.setName(deviceRq.getName());
+        device.setPlatform(deviceRq.getPlatform());
+        device.setToken(deviceRq.getToken());
+        device.setActive(true);
+
+        return device;
+    }
+
+    public DeviceRQ toDeviceRq(Device device, AppUserDevice appUserDevice) {
+        DeviceRQ deviceRq = new DeviceRQ();
+        deviceRq.setName(device.getName());
+        deviceRq.setPlatform(device.getPlatform());
+        deviceRq.setToken(device.getToken());
+        deviceRq.setOptin(appUserDevice.getOptIn());
+
+        return deviceRq;
+    }
+
+    /*public Set<AppUserDevice> toAppUserDeviceSet(Registration registration, AppUser appUser) {
         Set<AppUserDevice> appUserDevices = new HashSet<>();
         for(Device device : registration.getDevices()) {
             AppUserDevice appUserDevice = new AppUserDevice();
@@ -45,5 +65,5 @@ public class RegistrationMapper {
             appUserDevices.add(appUserDevice);
         }
         return appUserDevices;
-    }
+    }*/
 }

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class Device {
+public class DeviceRQ {
     private String token;
     private String platform;
     private String name;

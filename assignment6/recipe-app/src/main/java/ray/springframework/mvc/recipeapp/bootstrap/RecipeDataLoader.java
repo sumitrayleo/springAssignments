@@ -2,7 +2,6 @@ package ray.springframework.mvc.recipeapp.bootstrap;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ray.springframework.mvc.recipeapp.domain.Difficulty;
 import ray.springframework.mvc.recipeapp.domain.Ingredient;
@@ -14,7 +13,7 @@ import ray.springframework.mvc.recipeapp.repository.UnitOfMeasureRepository;
 import java.math.BigDecimal;
 
 @Slf4j
-@Component
+//@Component
 public class RecipeDataLoader implements CommandLineRunner {
 
     private final UnitOfMeasureRepository unitOfMeasureRepository;

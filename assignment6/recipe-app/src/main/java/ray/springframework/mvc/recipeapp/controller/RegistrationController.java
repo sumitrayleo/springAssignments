@@ -15,7 +15,7 @@ public class RegistrationController {
     }
 
     @GetMapping
-    public Registration register(String userId, String app){
+    public Registration register(@RequestParam String userId, @RequestParam String app){
         return registrationService.getAppUser(userId, app);
     }
 

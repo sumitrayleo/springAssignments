@@ -31,4 +31,9 @@ public class RegistrationDaoImpl implements RegistrationDao {
     public Device saveDevice(Device device) {
         return deviceRepository.save(device);
     }
+
+    @Override
+    public AppUser getAppUser(String userId, String app) {
+        return appUserRepository.findByUserIdAndApp(userId, app);
+    }
 }

@@ -7,4 +7,6 @@ public interface RegistrationDao {
     AppUser saveAppUser(AppUser appUser);
 
     Device saveDevice(Device device);
+
+    AppUser getAppUser(String userId, String app);
 }

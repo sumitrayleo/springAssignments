@@ -1,6 +1,5 @@
 package ray.springframework.mvc.recipeapp.domain;
 
-import lombok.Builder;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -10,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.UUID;
 
-@Builder
 @Entity
 public class Device {
 

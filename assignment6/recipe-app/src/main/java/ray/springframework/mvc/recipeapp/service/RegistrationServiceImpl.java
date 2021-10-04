@@ -8,6 +8,7 @@ import ray.springframework.mvc.recipeapp.domain.AppUser;
 import ray.springframework.mvc.recipeapp.domain.AppUserDevice;
 import ray.springframework.mvc.recipeapp.domain.Device;
 import ray.springframework.mvc.recipeapp.mapper.RegistrationMapper;
+import ray.springframework.mvc.recipeapp.model.DeviceRQ;
 import ray.springframework.mvc.recipeapp.model.Registration;
 
 import java.util.HashSet;
@@ -38,12 +39,13 @@ public class RegistrationServiceImpl implements RegistrationService {
         Set<AppUserDevice> appUserDevices = new HashSet<>();
         AppUser savedAppUser = registrationDao.saveAppUser(RegistrationMapper.toAppUser(registration));
 
-        for(Device device : registration.getDevices()) {
-            final Device savedDevice = registrationDao.saveDevice(device);
+        for(DeviceRQ device : registration.getDevices()) {
+            final Device savedDevice = registrationDao.saveDevice(RegistrationMapper.toDevice(device));
+
             final AppUserDevice appUserDevice = new AppUserDevice();
             appUserDevice.setAppUser(savedAppUser);
             appUserDevice.setDevice(savedDevice);
-            appUserDevice.setOptIn(true);
+            appUserDevice.setOptIn(device.getOptin());
 
             appUserDevices.add(appUserDevice);
         }
@@ -55,24 +57,12 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public Registration getAppUser(String userId, String app) {
-        /*Set<Device> devices = Stream.of(Device.builder()
-                .name("iPhone")
-                .token("sdjjdfh")
-                .platform("Mobile")
-                .active(true)
-                .build())
-                .collect(Collectors.toSet());
-
-        Registration registration = Registration.builder()
-                .app("MobileApp")
-                .userId("Sumit")
-                .devices(devices)
-                .build();
-        return registration;*/
-        return null;
+        AppUser appUser = registrationDao.getAppUser(userId, app);
+        Set<AppUserDevice> appUserdevices = appUser.getAppUserDevices();
+        return RegistrationMapper.toRegistration(appUser, appUserdevices);
     }
 
-    private void toAppUserDeviceSet(Registration registration, AppUser appUser) {
+    /*private void toAppUserDeviceSet(Registration registration, AppUser appUser) {
         //Set<AppUserDevice> appUserDevices = new HashSet<>();
         for(Device device : registration.getDevices()) {
             AppUserDevice appUserDevice = new AppUserDevice();
@@ -83,5 +73,5 @@ public class RegistrationServiceImpl implements RegistrationService {
             appUser.getAppUserDevices().add(appUserDevice);
         }
         //return appUserDevices;
-    }
+    }*/
 }

@@ -3,7 +3,6 @@ package ray.springframework.mvc.recipeapp.model;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import ray.springframework.mvc.recipeapp.domain.Device;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,11 +13,11 @@ import java.util.Set;
 public class Registration {
     private String userId;
     private String app;
-    private Set<Device> devices;
+    private Set<DeviceRQ> devices;
 
-    public Set<Device> getDevices() {
-        if (devices == null) {
-            devices = new HashSet<>();
+    public Set<DeviceRQ> getDevices() {
+        if(this.devices == null) {
+            this.devices = new HashSet<>();
         }
         return devices;
     }
