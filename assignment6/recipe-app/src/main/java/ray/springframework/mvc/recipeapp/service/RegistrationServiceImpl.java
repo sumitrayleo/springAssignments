@@ -23,16 +23,6 @@ public class RegistrationServiceImpl implements RegistrationService {
         this.registrationDao = registrationDao;
     }
 
-    /*@Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Registration save(Registration registration) {
-        AppUser appUser = RegistrationMapper.toAppUser(registration);
-        toAppUserDeviceSet(registration, appUser);
-        AppUser savedAppUser = registrationDao.saveAppUser(appUser);
-
-        return RegistrationMapper.toRegistration(savedAppUser, appUser.getAppUserDevices());
-    }*/
-
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Registration save(Registration registration) {
@@ -58,20 +48,16 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     public Registration getAppUser(String userId, String app) {
         AppUser appUser = registrationDao.getAppUser(userId, app);
-        Set<AppUserDevice> appUserdevices = appUser.getAppUserDevices();
-        return RegistrationMapper.toRegistration(appUser, appUserdevices);
+        return RegistrationMapper.toRegistration(appUser, appUser.getAppUserDevices());
     }
 
-    /*private void toAppUserDeviceSet(Registration registration, AppUser appUser) {
-        //Set<AppUserDevice> appUserDevices = new HashSet<>();
-        for(Device device : registration.getDevices()) {
-            AppUserDevice appUserDevice = new AppUserDevice();
-            appUserDevice.setAppUser(appUser);
-            appUserDevice.setDevice(device);
-            appUserDevice.setOptIn(true);
+    /*@Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public Registration save(Registration registration) {
+        AppUser appUser = RegistrationMapper.toAppUser(registration);
+        toAppUserDeviceSet(registration, appUser);
+        AppUser savedAppUser = registrationDao.saveAppUser(appUser);
 
-            appUser.getAppUserDevices().add(appUserDevice);
-        }
-        //return appUserDevices;
+        return RegistrationMapper.toRegistration(savedAppUser, appUser.getAppUserDevices());
     }*/
 }
