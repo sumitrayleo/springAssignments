@@ -8,5 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface DeviceRepository extends JpaRepository<Device, UUID> {
-
+    Device findByNameAndToken(String name, String token);
 }

@@ -52,6 +52,7 @@ public class Device {
         this.name = name;
     }
 
+    @Column(name = "active", updatable = false, nullable = false)
     public Boolean getActive() {
         return active;
     }

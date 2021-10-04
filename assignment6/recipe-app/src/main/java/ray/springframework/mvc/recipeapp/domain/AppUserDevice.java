@@ -12,7 +12,7 @@ public class AppUserDevice {
 
     @Id
     @ManyToOne
-    //@JoinColumn(name = "appuser_id", referencedColumnName = "id")
+    @JoinColumn(updatable = false)
     public AppUser getAppUser() {
         return appUser;
     }
@@ -23,7 +23,7 @@ public class AppUserDevice {
 
     @Id
     @ManyToOne
-    //@JoinColumn(name = "device_id", referencedColumnName = "id")
+    @JoinColumn(updatable = false)
     public Device getDevice() {
         return device;
     }

@@ -1,11 +1,9 @@
 package ray.springframework.mvc.recipeapp.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import ray.springframework.mvc.recipeapp.dao.RegistrationDao;
 import ray.springframework.mvc.recipeapp.domain.AppUser;
-import ray.springframework.mvc.recipeapp.domain.AppUserDevice;
 import ray.springframework.mvc.recipeapp.domain.Device;
 import ray.springframework.mvc.recipeapp.mapper.RegistrationMapper;
 import ray.springframework.mvc.recipeapp.model.DeviceRQ;
@@ -24,30 +22,30 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Registration save(Registration registration) {
-        Set<AppUserDevice> appUserDevices = new HashSet<>();
-        AppUser savedAppUser = registrationDao.saveAppUser(RegistrationMapper.toAppUser(registration));
+        final AppUser appUser = RegistrationMapper.toAppUser(registration);
+        final Set<Device> devices = toDevices(registration);
 
-        for(DeviceRQ device : registration.getDevices()) {
-            final Device savedDevice = registrationDao.saveDevice(RegistrationMapper.toDevice(device));
+        AppUser savedAppUser = registrationDao.save(appUser, devices);
+        return RegistrationMapper.toRegistration(savedAppUser, savedAppUser.getAppUserDevices());
+    }
 
-            final AppUserDevice appUserDevice = new AppUserDevice();
-            appUserDevice.setAppUser(savedAppUser);
-            appUserDevice.setDevice(savedDevice);
-            appUserDevice.setOptIn(device.getOptin());
-
-            appUserDevices.add(appUserDevice);
+    private Set<Device> toDevices(Registration registration) {
+        Set<Device> devices = new HashSet<>();
+        for(DeviceRQ deviceRq : registration.getDevices()) {
+            final Device device = RegistrationMapper.toDevice(deviceRq);
+            if(StringUtils.isEmpty(device.getActive())) {
+                // TODO: Defaulted to TRUE
+                device.setActive(true);
+            }
+            devices.add(device);
         }
-        savedAppUser.setAppUserDevices(appUserDevices);
-        registrationDao.saveAppUser(savedAppUser);
-
-        return RegistrationMapper.toRegistration(savedAppUser, appUserDevices);
+        return devices;
     }
 
     @Override
     public Registration getAppUser(String userId, String app) {
-        AppUser appUser = registrationDao.getAppUser(userId, app);
+        final AppUser appUser = registrationDao.findAppUser(userId, app);
         return RegistrationMapper.toRegistration(appUser, appUser.getAppUserDevices());
     }
 
